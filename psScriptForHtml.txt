@@ -1,0 +1,25 @@
+$WorkFolder = "D:\USIS\AutomatedScripts\work-folder"
+$LocalGitRepo = "$WorkFolder\tempgitrepo\$(get-date -f yyyyMMddTHHmmssZ)"
+$BackupFolder = "$WorkFolder\backups"
+
+$WebsiteDocumentRoot = "C:\xampp\htdocs\sampleweb"
+$NewBackupFolder = "$BackupFolder\$(get-date -f yyyyMMddTHHmmssZ)"
+
+
+cd $WorkFolder
+
+##  Remove-Item -Path "$WorkFolder\*.*" -Hidden -Recurse
+##  Get-ChildItem -Path $LocalGitRepo -Include * | remove-Item -Recurse 
+
+##  Get-ChildItem $LocalGitRepo -Hidden -Recurse | Remove-Item -Force -Verbose
+
+mkdir $LocalGitRepo
+git clone https://github.com/barath-at-github/simple-webpage.git $LocalGitRepo
+
+mkdir $NewBackupFolder
+
+Copy-item -Force -Recurse -Verbose "$WebsiteDocumentRoot\*" -Destination $NewBackupFolder
+
+Copy-item -Force -Recurse -Verbose "$LocalGitRepo\*" -Destination $WebsiteDocumentRoot
+
+Remove-Item -Path $LocalGitRepo -Recurse
